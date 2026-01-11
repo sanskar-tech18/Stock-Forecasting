@@ -146,6 +146,7 @@ export class StockForecastAPI {
     }, ForecastResponseSchema);
   }
 }
+console.log('DEFAULT_BASE_URL ->', DEFAULT_BASE_URL);
 
 // Export singleton instance
 export const stockForecastAPI = new StockForecastAPI();
