@@ -6,6 +6,17 @@ const StockSchema = z.object({
   name: z.string()
 });
 
+const DEFAULT_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:5000";
+
+export class StockForecastAPI {
+  private baseURL: string;
+
+  constructor(baseURL: string = DEFAULT_BASE_URL) {
+    this.baseURL = baseURL;
+  }
+}
+
 const ModelResultSchema = z.object({
   predictions: z.array(z.object({
     date: z.string(),
