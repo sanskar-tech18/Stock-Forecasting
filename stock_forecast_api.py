@@ -56,8 +56,20 @@ SEED = 42
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
+from flask_cors import CORS
+
 app = Flask(__name__, static_folder='frontend', static_url_path='/')
-CORS(app)
+CORS(
+    app,
+    resources={r"/api/*": {"origins": "*"}},
+    supports_credentials=True
+)
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+    response.headers.add("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+    return response
 
 # Load Angel One credentials from env (do NOT print these)
 ANGEL_API_KEY = os.getenv('ANGEL_API_KEY')
