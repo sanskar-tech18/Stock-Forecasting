@@ -9,6 +9,10 @@ import { Search, Bell, Clock, CheckCircle, AlertCircle, Activity, Sparkles, Tren
 import { stockForecastAPI, ForecastResponse } from "../services/api";
 import { toast } from "sonner";
 
+const backendUrl = import.meta.env.VITE_API_BASE_URL ?? 'https://stock-forecasting-pw04.onrender.com';
+console.log('=== DASHBOARD LOADED - CORRECT FILE - API INTEGRATED ===');
+console.log('Backend API URL:', backendUrl);
+
 export function Dashboard() {
   console.log('=== DASHBOARD LOADED - CORRECT FILE - API INTEGRATED ===');
   console.log('Backend API URL: http://127.0.0.1:5000');
