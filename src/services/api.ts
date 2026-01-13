@@ -1,8 +1,6 @@
-// Updated API client: supports runtime override via window.__API_BASE_URL__
-// and falls back to import.meta.env.VITE_API_BASE_URL or production fallback.
 import { z } from 'zod';
 
-// API schemas (unchanged)
+// API schemas
 const StockSchema = z.object({ symbol: z.string(), name: z.string() });
 
 const ModelResultSchema = z.object({
@@ -40,10 +38,10 @@ export interface ForecastRequestParams {
   forecast_days?: number;
 }
 
-// Runtime/respected base URL resolution order:
-// 1) window.__API_BASE_URL__ (settable at runtime from index.html or hosting platform)
+// Runtime / build-time base URL resolution:
+// 1) window.__API_BASE_URL__ (runtime override, set in index.html if needed)
 // 2) import.meta.env.VITE_API_BASE_URL (Vite build-time env var)
-// 3) hard-coded fallback (production Render URL)
+// 3) production fallback (Render URL)
 const RUNTIME_BASE =
   (typeof window !== 'undefined' && (window as any).__API_BASE_URL__) ||
   import.meta.env.VITE_API_BASE_URL ||
@@ -57,7 +55,6 @@ export class StockForecastAPI {
     this.baseURL = baseURL;
   }
 
-  // Optional setter if you need to change at runtime from code
   setBaseUrl(url: string) {
     this.baseURL = url;
   }
@@ -66,14 +63,20 @@ export class StockForecastAPI {
     const url = `${this.baseURL}${endpoint}`;
     console.log(`API Request: ${options.method || 'GET'} ${url}`);
 
-    const response = await fetch(url, {
-      headers: { 'Content-Type': 'application/json', ...options.headers },
-      ...options,
-    });
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        headers: { 'Content-Type': 'application/json', ...options.headers },
+        ...options,
+      });
+    } catch (err) {
+      console.error('Network/fetch error:', err);
+      throw new Error('Network error while calling API');
+    }
 
     if (!response.ok) {
-      // log more details for debugging
-      console.error('API request failed', response.status, response.statusText, await response.text().catch(() => ''));
+      const text = await response.text().catch(() => '');
+      console.error('API request failed', response.status, response.statusText, text);
       throw new Error(`API request failed: ${response.status} ${response.statusText}`);
     }
 
@@ -111,6 +114,7 @@ export class StockForecastAPI {
 }
 
 export const stockForecastAPI = new StockForecastAPI();
+
 export function useApiService() {
   const getStockOptions = () => [
     { value: 'RELIANCE-EQ', label: 'Reliance Industries' },
