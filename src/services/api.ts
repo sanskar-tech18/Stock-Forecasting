@@ -6,17 +6,11 @@ const StockSchema = z.object({
   name: z.string()
 });
 
+// Production fallback backend URL (can be overridden by Vite env at build time)
 const DEFAULT_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? "https://stock-forecasting-pw04.onrender.com";
 
-export class StockForecastAPI {
-  private baseURL: string;
-
-  constructor(baseURL: string = DEFAULT_BASE_URL) {
-    this.baseURL = baseURL;
-  }
-}
-
+// Zod schemas for API responses
 const ModelResultSchema = z.object({
   predictions: z.array(z.object({
     date: z.string(),
@@ -73,11 +67,11 @@ export interface ForecastRequestParams {
   forecast_days?: number;
 }
 
-// API service class
+// API service class (single declaration)
 export class StockForecastAPI {
   private baseURL: string;
 
-  constructor(baseURL: string = 'http://127.0.0.1:5000') {
+  constructor(baseURL: string = DEFAULT_BASE_URL) {
     this.baseURL = baseURL;
   }
 
@@ -87,7 +81,6 @@ export class StockForecastAPI {
     responseSchema: z.ZodSchema<T>
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
-    
     console.log(`API Request: ${options.method || 'GET'} ${url}`);
 
     const response = await fetch(url, {
@@ -127,13 +120,8 @@ export class StockForecastAPI {
       forecast_days: params.forecast_days || 7,
     };
 
-    if (params.totp) {
-      payload.totp = params.totp;
-    }
-
-    if (params.use_angelone !== undefined) {
-      payload.use_angelone = params.use_angelone;
-    }
+    if (params.totp) payload.totp = params.totp;
+    if (params.use_angelone !== undefined) payload.use_angelone = params.use_angelone;
 
     return this.request('/api/forecast', {
       method: 'POST',
@@ -147,9 +135,7 @@ export class StockForecastAPI {
       forecast_days: params.forecast_days || 7,
     };
 
-    if (params.totp) {
-      payload.totp = params.totp;
-    }
+    if (params.totp) payload.totp = params.totp;
 
     return this.request('/api/forecast-mock', {
       method: 'POST',
@@ -157,6 +143,7 @@ export class StockForecastAPI {
     }, ForecastResponseSchema);
   }
 }
+
 console.log('DEFAULT_BASE_URL ->', DEFAULT_BASE_URL);
 
 // Export singleton instance
