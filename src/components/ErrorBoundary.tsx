@@ -1,19 +1,41 @@
-import React from 'react';
+import { useState } from "react";
+import { Header } from "./components/Header";
+import { LandingPage } from "./components/LandingPage";
+import { Dashboard } from "./components/Dashboard";
+import { Toaster } from "./components/ui/sonner";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
-interface State { hasError: boolean; error?: any; }
-export class ErrorBoundary extends React.Component<{children: React.ReactNode}, State> {
-  constructor(props: any) { super(props); this.state = { hasError: false }; }
-  static getDerivedStateFromError(error: any) { return { hasError: true, error }; }
-  componentDidCatch(error: any, info: any) { console.error('ErrorBoundary caught', error, info); }
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div style={{padding: 20}}>
-          <h2>Something went wrong</h2>
-          <pre style={{whiteSpace: 'pre-wrap'}}>{String(this.state.error)}</pre>
-        </div>
-      );
-    }
-    return this.props.children;
-  }
+export default function App() {
+  const [currentPage, setCurrentPage] = useState<'landing' | 'dashboard'>('landing');
+
+  const handleNavigate = (page: 'landing' | 'dashboard') => {
+    setCurrentPage(page);
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header onNavigate={handleNavigate} currentPage={currentPage} />
+      
+      <div className="pt-20">
+        <ErrorBoundary>
+          {currentPage === 'landing' ? (
+            <LandingPage onNavigate={handleNavigate} />
+          ) : (
+            <Dashboard />
+          )}
+        </ErrorBoundary>
+      </div>
+
+      <Toaster 
+        toastOptions={{
+          style: {
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            color: 'hsl(var(--foreground))'
+          }
+        }}
+      />
+    </div>
+  );
 }
