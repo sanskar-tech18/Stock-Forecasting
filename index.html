@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Stock Forecasting</title>
 
-    <!-- Runtime API base URL override so we can change backend without rebuilding -->
+    <!-- Runtime API base override so we can change backend without rebuilding -->
     <script>
-      // Set this to your Render backend. Can be overridden in the future by hosting platform.
+      // Set runtime API base (can be overridden by hosting platform if needed)
       window.__API_BASE_URL__ = 'https://stock-forecasting-pw04.onrender.com';
       console.log('window.__API_BASE_URL__ ->', window.__API_BASE_URL__);
     </script>
-
-    <!-- Vite will inject other tags here -->
   </head>
   <body>
     <div id="root"></div>
