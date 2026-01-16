@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Header } from "./components/Header";
+import { Header } from "./Header";
 import { LandingPage } from "./components/LandingPage";
 import { Dashboard } from "./components/Dashboard";
 import { Toaster } from "./components/ui/sonner";
