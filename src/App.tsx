@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Header } from "./components/Header";
 import { LandingPage } from "./components/LandingPage";
 import { Dashboard } from "./components/Dashboard";
-import { Toaster } from "./ui/sonner";
+import { Toaster } from "./components/ui/sonner";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 
 export default function App() {
