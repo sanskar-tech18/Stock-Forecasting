@@ -3,7 +3,6 @@ import { Header } from "./Header";
 import { LandingPage } from "./LandingPage";
 import { Dashboard } from "./Dashboard";
 import { Toaster } from "./ui/sonner";
-import { ErrorBoundary } from "./ErrorBoundary";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'landing' | 'dashboard'>('landing');
