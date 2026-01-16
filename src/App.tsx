@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Header } from "./Header";
-import { LandingPage } from "./LandingPage";
-import { Dashboard } from "./Dashboard";
+import { Header } from "./components/Header";
+import { LandingPage } from "./components/LandingPage";
+import { Dashboard } from "./components/Dashboard";
 import { Toaster } from "./ui/sonner";
-import { ErrorBoundary } from "./ErrorBoundary";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 export default function App() {
   const [currentPage, setCurrentPage] =
