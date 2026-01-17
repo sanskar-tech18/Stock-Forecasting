@@ -45,7 +45,7 @@ export interface ForecastRequestParams {
 const RUNTIME_BASE =
   (typeof window !== 'undefined' && (window as any).__API_BASE_URL__) ||
   import.meta.env.VITE_API_BASE_URL ||
-  'https://stock-forecasting-pw04.onrender.com';
+  'stock-forecasting-production-07c1.up.railway.app';
 
 console.log('Resolved API base URL (runtime):', RUNTIME_BASE);
 

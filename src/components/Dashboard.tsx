@@ -16,7 +16,7 @@ import { toast } from "sonner";
 
 const backendUrl =
   import.meta.env.VITE_API_BASE_URL ??
-  "https://stock-forecasting-pw04.onrender.com";
+  "stock-forecasting-production-07c1.up.railway.app";
 
 console.log("=== DASHBOARD LOADED ===");
 console.log("Backend API URL:", backendUrl);
