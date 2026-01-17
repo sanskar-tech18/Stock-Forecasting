@@ -66,6 +66,14 @@ CORS(
     methods=["GET", "POST", "OPTIONS"]
 )
 
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    return response
+
+
 
 # Load Angel One credentials from env (do NOT print these)
 ANGEL_API_KEY = os.getenv('ANGEL_API_KEY')
@@ -385,7 +393,7 @@ def train_and_forecast(df, days=7, n_test=100, time_step=60, lstm_units=64, arim
 
 # -------------------------
 # Flask endpoints (mirrors original)
-@app.route('/api/forecast', methods=['POST'])
+@app.route('/api/forecast', methods=['POST', 'OPTIONS'])
 def forecast():
     print("=" * 80)
     print(" REAL FORECAST API CALLED")
