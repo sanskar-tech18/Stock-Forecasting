@@ -56,27 +56,36 @@ SEED = 42
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
+from flask import Flask, request, jsonify, make_response
+from flask_cors import CORS
 
 app = Flask(__name__, static_folder='frontend', static_url_path='/')
 
-# Enable CORS for all routes
-CORS(app)
+# Simple CORS configuration
+CORS(app, resources={
+    r"/*": {
+        "origins": "*",
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 @app.before_request
-def handle_preflight():
+def handle_options():
     if request.method == "OPTIONS":
-        res = make_response()
-        res.headers['Access-Control-Allow-Origin'] = '*'
-        res.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
-        res.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-        return res
+        response = make_response('', 204)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+        return response
 
 @app.after_request
-def add_cors_headers(response):
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
     return response
+
 
 # Load Angel One credentials from env (do NOT print these)
 ANGEL_API_KEY = os.getenv('ANGEL_API_KEY')
