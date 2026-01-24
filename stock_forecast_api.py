@@ -59,11 +59,10 @@ tf.random.set_seed(SEED)
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 
-
 app = Flask(__name__, static_folder='frontend', static_url_path='/')
 
-# Simple CORS - let flask-cors handle everything
-CORS(app)
+# Enable CORS for all routes with all origins
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Load Angel One credentials from env (do NOT print these)
 ANGEL_API_KEY = os.getenv('ANGEL_API_KEY')
