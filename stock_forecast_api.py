@@ -62,9 +62,8 @@ from flask_cors import CORS
 
 app = Flask(__name__, static_folder='frontend', static_url_path='/')
 
-# Enable CORS for all routes with all origins
-CORS(app, resources={r"/*": {"origins": "*"}})
-
+# Simple CORS - let flask-cors handle everything
+CORS(app)
 
 # Load Angel One credentials from env (do NOT print these)
 ANGEL_API_KEY = os.getenv('ANGEL_API_KEY')
